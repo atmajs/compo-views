@@ -1,0 +1,13 @@
+let ItemLayout {
+	.form-group {
+		
+		label.control-label.col-sm-@[attr.offset] {
+			@label;
+		}
+		
+		.col-sm-@[12-attr.offset] {
+			@content;
+			@else > @element;
+		}
+	}
+}

@@ -1,0 +1,8 @@
+let Text {
+	include ItemLayout {
+		@element {
+			textarea .form-control placeholder='@attr.placeholder'  rows='@[attr.rows || 4]' >
+				:dualbind value='@attr.property';
+		}
+	}
+}

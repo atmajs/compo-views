@@ -1,0 +1,8 @@
+a:form type=horizontal {
+
+	Radio property=someRadio {
+		@Option value='A' > 'Letter A'
+		@Option value='B' > 'Letter B'
+		@Option value='C' > 'Letter C'
+	}
+}

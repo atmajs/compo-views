@@ -1,0 +1,12 @@
+let Checkbox {
+	include ItemLayout {
+		@element {
+			label {
+				input type='checkbox' class='@[attr.class]'>
+					:dualbind value='@attr.property';
+				
+				span > ' @[attr.text]'
+			}
+		}
+	}
+}

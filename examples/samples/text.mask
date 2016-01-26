@@ -1,0 +1,4 @@
+a:form type=horizontal {
+
+	Text value=someString;
+}

@@ -1,0 +1,30 @@
+{
+  "name": "",
+  "version": "0.10.17",
+  "devDependencies": {
+    "atma": ">0.9.26",
+    "atma-loader-babel": "latest",
+    "atma-server": "^0.1.22"
+  },
+  "scripts": {
+    "test": "atma test",
+    "examples": "atma custom examples/index",
+    "build": "atma"
+  },
+  "atma": {
+    "plugins": [
+      "atma-loader-babel"
+    ],
+    "settings": {
+      "atma-loader-babel": {
+        "extensions": [
+          "es6",
+          "test"
+        ]
+      }
+    }
+  },
+  "dependencies": {
+    "maskjs": "^0.51.27"
+  }
+}

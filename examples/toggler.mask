@@ -1,0 +1,19 @@
+slot showView (e) {
+	var url = e.target.dataset.route;
+	var id = e.target.dataset.view;
+	app.find('ViewManager').navigate(url);
+}
+slot navigateView (e) {
+	var route = e.target.dataset.route;
+	ruta.navigate(route)
+}
+section .show {
+	tt > 'Show via direct fn call:'
+	button x-tap='showView' data-route='?one' > 'One';
+	button x-tap='showView' data-route='?two' > 'Two';
+}
+section .navigate {
+	tt > 'Show via route navigation:'
+	button x-tap='navigateView' data-route='?one' > 'One';
+	button x-tap='navigateView' data-route='?two' > 'Two';
+}

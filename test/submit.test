@@ -1,0 +1,29 @@
+UTest({
+	$config: {
+		'http.process': {
+			command: 'npm run examples',
+			matchReady: '/Listen /'
+		}
+	},
+	$before (next) {
+		UTest
+			.server
+			.request('http://localhost:5771/examples/index.html?submit')
+			.done((doc, win) => {
+				next(doc, win);
+			});
+	},
+	'success form' (done, doc, win) {
+		UTest
+			.domtest(doc.body, `
+				find ('.someSuccess') {
+					find('button') {
+						do click;
+					}
+					await ('.alert-success');
+				}
+			`)
+			.always(() => done(doc, win));
+	},
+	
+})

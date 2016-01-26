@@ -1,0 +1,4 @@
+a:form type=horizontal {
+
+	Checkbox value=someBoolean text = 'Make foo';
+}

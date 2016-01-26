@@ -1,0 +1,5 @@
+let Template {
+	include ItemLayout {
+		@element > @template;
+	}
+}

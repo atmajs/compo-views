@@ -1,0 +1,14 @@
+let Radio {
+	include ItemLayout {
+		@element {
+			
+			@each (Option) > .radio > label {
+				input type = radio name='@attr.property' value='@attr.value' class='@attr.class' >
+					:dualbind value='@attr.property';
+					
+				@placeholder;
+			}
+			
+		}
+	}
+}
