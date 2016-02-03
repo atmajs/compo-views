@@ -8,12 +8,14 @@
 	</head>
 	<body>
 		<script type='text/mask' data-run='auto'>
+			h3 > 'Sync tabs'
+			
 			ViewManager {
-				View route='?one' {
-					import from 'one.mask';
+				View route='?one' default{
+					b style='background: green' > 'One'
 				}
-				View route='?two' default {
-					import from 'two.mask';
+				View route='?two' {
+					em style='background: red' > 'Two'
 				}
 			}
 

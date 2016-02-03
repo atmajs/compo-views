@@ -1,14 +1,14 @@
 UTest({
 	$config: {
-		'http.process': {
-			command: 'npm run examples',
-			matchReady: '/Listen /'
-		}
+		//'http.process': {
+		//	command: 'npm run examples',
+		//	matchReady: '/Listen /'
+		//}
 	},
 	$before (next) {
 		UTest
 			.server
-			.request('http://localhost:5771/examples/index.html?submit')
+			.request('http://localhost:5777/examples/tabs/async.html')
 			.done((doc, win) => {
 				next(doc, win);
 			});
@@ -16,14 +16,20 @@ UTest({
 	'success form' (done, doc, win) {
 		UTest
 			.domtest(doc.body, `
-				find ('.someSuccess') {
-					find('button') {
-						do click;
-					}
-					await ('.alert-success');
+				hasNot ('b');
+				await (300);
+				has ('b');
+
+				find ('.navigate > [data-route="?two"]') {
+					do click;
 				}
+				hasNot('em');
+				has('.-a-views-progress');
+				has('b');
+				await('em');
+				hasNot('b');
 			`)
 			.always(() => done(doc, win));
 	},
-	
+
 })

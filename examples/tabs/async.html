@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+	<head>
+		<script src='../../bower_components/maskjs/lib/mask.js'></script>
+		<script src='../../bower_components/ruta/lib/ruta.js'></script>
+		<script src='../../lib/views.js'></script>
+
+	</head>
+	<body>
+		<script type='text/mask' data-run='auto'>
+			h3 > 'Async tabs'
+
+			let AsyncOne {
+				function onRenderStart () {
+					var self = this;
+					return mask.class.Deferred.run(function(resolve){
+						setTimeout(function(){
+							self.nodes = mask.parse("b style='background: green' > 'One'");
+							resolve();
+						}, 300)
+					})
+				}
+			}
+			let AsyncTwo {
+				function onRenderStart () {
+					var self = this;
+					return mask.class.Deferred.run(function(resolve){
+						setTimeout(function(){
+							self.nodes = mask.parse("em style='background: red' > 'Two'");
+							resolve();
+						}, 300)
+					})
+				}
+			}
+
+			ViewManager {
+				View route='?one' default{
+					AsyncOne;
+				}
+				View route='?two' {
+					AsyncTwo;
+				}
+			}
+
+			import from '../toggler';
+		</script>
+	</body>
+</html>

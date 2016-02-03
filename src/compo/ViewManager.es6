@@ -36,9 +36,6 @@ var ViewManagerCompo = mask.Compo({
 	},
 
 	onRenderStart (model, ctx) {
-		this.ensureCompo_('Notification');
-		this.ensureCompo_('Progress');
-
 		ViewMap.ensure(this, model, ctx);
 		ViewMap.createRoutes(this);
 
@@ -47,44 +44,50 @@ var ViewManagerCompo = mask.Compo({
 
 		this.route = route;
 		this.nodes = route && route.value.getNodes();
+		this.ensureCompo_('Notification');
+		this.ensureCompo_('Progress');
+		this.attr.path = path;
 	},
 	onRenderEnd (elements, model, ctx) {
+		this.activityTracker = new ActivityTracker(this);
+
+		ViewMap.ensure(this, model, ctx);
 		if (this.xRouting) {
 			ViewMap.bindRouter(this, model, ctx);
 		}
-
-		if (this.route != null) {
-			var viewData = this.route.value;
-			viewData.compo = this.find('View');
+		if (this.route == null && this.attr.path != null) {
+			this.route = ViewMap.getRouteByPath(this, this.attr.path);
 		}
+		if (this.route == null) {
+			return;
+		}
+		var viewData = this.route.value;
+		viewData.compo = this.find('View');
+		if (viewData.compo != null) {
+			viewData.compo.emitIn('viewActivation');
+		}
+		this.activityTracker.show(this.route, () => Compo.await(this));
 	},
 	navigate (path) {
-		return mask.class.Deferred.run((resolve, reject) => {
-			var route = ViewMap.getRouteByPath(this, path);
-			if (route == null) {
-				return reject(`View not found: ${path}`);
-			}
-			this.next = route;
-			this
-				.renderView(route)
-				.fail(reject)
-				.done(route => {
-					this.performShow(route);
-					resolve();
-				});
-		});
+		var route = ViewMap.getRouteByPath(this, path);
+		if (route == null) {
+			return new mask.class.Deferred().reject(`View not found: ${path}`);
+		}
+		return this
+			.activityTracker
+			.show(route, () => this.renderView(route))
+			.done(() => this.performShow(route));
 	},
 
 	hideCompo_ (compo) {
-		if (compo == null) {
-			return null;
-		}
-		compo.emitIn('viewDeactivation');
+		if (compo == null) return;
+		compo.emitIn('viewDeactivation', this);
 		compo.hide_();
 	},
 
 	showCompo_ (compo) {
-		compo.emitIn('viewActivation');
+		if (compo == null) return;
+		compo.emitIn('viewActivation', this);
 		compo.show_();
 	},
 
@@ -92,8 +95,12 @@ var ViewManagerCompo = mask.Compo({
 		Compo.pipe('views').emit(type, this, ...args);
 	},
 
+	activate (route) {
+		compo.emitIn('viewActivation', route.current.params);
+	},
+
 	renderView (route) {
-		return mask.class.Deferred.run((resolve, reject) => {
+		return mask.class.Deferred.run((resolve, reject, dfr) => {
 			if (route.value.compo) {
 				resolve(route);
 				return;
@@ -112,9 +119,6 @@ var ViewManagerCompo = mask.Compo({
 	performShow (route) {
 		var current = this.route;
 		if (current === route) {
-			return;
-		}
-		if (route !== this.next) {
 			return;
 		}
 		this.route = route;
