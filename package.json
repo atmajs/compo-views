@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "atma test",
-    "examples": "atma server --port 5771",
+    "examples": "atma server",
     "build": "atma"
   },
   "atma": {

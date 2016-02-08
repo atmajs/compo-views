@@ -1,3 +1,0 @@
-a:form action='/foo/single' get {
-	Input property='name';
-}
