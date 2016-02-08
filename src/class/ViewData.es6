@@ -30,7 +30,13 @@ var ViewData = mask.class.create({
 		}
 	},
 	getNodes () {
-		return this.viewNode || this.nodes || mask.parse(`import from '${this.path}'`);
+		if (this.viewNode != null) {
+			if (this.path != null && this.viewNode.nodes == null) {
+				this.viewNode.nodes = mask.parse(`import from '${this.path}'`);
+			}
+			return this.viewNode;
+		}
+		return this.nodes;
 	}
 });
 
@@ -88,7 +94,11 @@ var ViewMap = {
 			console.error('Viewmap is undefined');
 			return;
 		}
+		if (viewManager.xNested === true && viewManager.isNested() === true) {
+			return;
+		}
 		for(var key in viewmap) {
+			console.log('BIND', key);
 			ruta.add(key, route => {
 				viewManager.navigate(route.current.path);
 			});

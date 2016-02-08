@@ -1,0 +1,67 @@
+UTest({
+	$before (next) {
+		UTest
+			.server
+			.request('http://localhost:5777/examples/tabs/nested.html')
+			.done((doc, win) => {
+				next(doc, win);
+			});
+	},
+	'should show initial view' (done, doc, win) {
+		UTest.domtest(doc.body, `
+				has ('#a1b1');
+
+				find ('#lights') {
+					children () > length 2;
+					children ('.active') > length 2;
+				}
+
+				find ('.v-view .v-view') {
+					children () > length 1;
+					text ('a1-b1');
+				}
+			`)
+			.always(() => done(doc, win));
+	},
+	'should show the 2. view of the root view-manager' (done, doc, win) {
+		UTest.domtest(doc.body, `
+				find ('[data-route="?a=2&b=1"]') > click;
+
+				hasNot ('.v-view .v-view');
+				find ('.v-view') > text ('a2');
+
+				find ('#lights') {
+					children () > length 3;
+					children ('.active') {
+						length 1;
+						children('td:eq(0)') > text ('a2');
+					}
+					children (':not(.active)') {
+						length 2;
+						eq (0) > children('td:eq(1)') > text ('0');
+						eq (1) > children('td:eq(1)') > text ('0');
+					}
+				}
+			`)
+			.always(() => done(doc, win));
+	},
+	'should show first view of the root view-manager and the second view of a child view-manager' (done, doc, win) {
+		UTest.domtest(doc.body, `
+				find ('[data-route="?a=1&b=2"]') > click;
+				find ('#lights') {
+					children () > length 4;
+					children ('.active') {
+						length 2;
+						eq (0) > children('td:eq(0)') > text ('a1');
+						eq (1) > children('td:eq(0)') > text ('a1b2');
+					}
+					children (':not(.active)') {
+						length 2;
+						eq (0) > children('td:eq(1)') > text ('0');
+						eq (1) > children('td:eq(1)') > text ('0');
+					}
+				}
+			`)
+			.always(() => done(doc, win));
+	},
+})

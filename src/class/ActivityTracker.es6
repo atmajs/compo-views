@@ -20,7 +20,7 @@ var ActivityTracker;
 
 			this.history.push(route)
 			this.requestProgressStart();
-			return dfr.done(() => this.requestProgressEnd(route));
+			return dfr.done(() => this.requestProgressEnd(route)).fail(() => { debugger });
 		},
 		requestProgressStart (route) {
 			this.cancelProgressEnd();

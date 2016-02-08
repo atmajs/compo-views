@@ -8,16 +8,17 @@
 	</head>
 	<body>
 		<script type='text/mask' data-run='auto'>
+			import Toggler from '../toggler';
+
 			ViewManager {
-				View route='?one' {
+				View route='?a1' {
 					import from 'one.mask';
 				}
-				View route='?two' default {
-					import from 'two.mask';
-				}
+				View route='?a2' default  path='two';
+				View route='?a3' path='three';
 			}
 
-			import from '../toggler';
+			Toggler (3);
 		</script>
 	</body>
 </html>

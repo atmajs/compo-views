@@ -35,14 +35,6 @@
 	// import class/ViewData.es6
 	// import class/ActivityTracker.es6
 	
-	// import class/Message.es6
-	// import class/ValidationError.es6
-	// import class/HttpError.es6
-
-	// import partial/Transport.es6
-	// import partial/Validation.es6
-	// import partial/Builder.es6
-
 	// import compo/ViewManager.es6
 	mask.registerHandler('ViewManager', ViewManagerCompo);
 }));

@@ -1,10 +1,4 @@
 UTest({
-	$config: {
-		//'http.process': {
-		//	command: 'npm run examples',
-		//	matchReady: '/Listen /'
-		//}
-	},
 	$before (next) {
 		UTest
 			.server
@@ -13,7 +7,7 @@ UTest({
 				next(doc, win);
 			});
 	},
-	'success form' (done, doc, win) {
+	'should load and switch tabs async' (done, doc, win) {
 		UTest
 			.domtest(doc.body, `
 				hasNot ('b');

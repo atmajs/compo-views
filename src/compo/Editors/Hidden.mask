@@ -1,2 +1,0 @@
-input type='hidden' name='@attr.property' >
-	dualbind value='@attr.property';

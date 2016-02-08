@@ -4,7 +4,7 @@ module.exports = {
 		files: 'builds/**',
 		output: 'lib/'
 	},
-	
+
 	'uglify': {
 		settings: {
 			io: {
@@ -13,27 +13,20 @@ module.exports = {
 				}
 			}
 		},
-		files: 'builds/form.js',
-		output: 'lib/form.min.js'
-	},
-
-	'copy_project': {
-		action: 'copy',
-		files: {
-			'lib/form.js': 'file://d:/work/APO/Erfolgsrezept/Web/bower_components/compo-form/lib/'
-		}
+		files: 'builds/view.js',
+		output: 'lib/view.min.js'
 	},
 
 	'watch': {
 		files: 'src/**',
-		config: ['#[build js]', '#[copy_project]']
+		config: ['#[build js]']
 	},
-	
+
 	'defaults': ['build js', 'uglify']
 };
 
 function JSHint() {
-	
+
 	var options = {
 			"bitwise": false,
 			"camelcase": false,
@@ -113,4 +106,3 @@ function JSHint() {
 		globals: options.predef
 	};
 }
-

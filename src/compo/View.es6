@@ -14,6 +14,14 @@ var ViewCompo;
 				'detach': true
 			}
 		},
+		slots: {
+			viewDeactivation () {
+				if (this.state === view_HIDDEN) {
+					return false;
+				}
+				this.state = view_HIDDEN;
+			}
+		},
 		tagName: 'div',
 		attr: {
 			class: 'v-view',
@@ -26,12 +34,13 @@ var ViewCompo;
 		hide_ () {
 			this.hide().then(() => {
 				if (this.xDetach === true) {
+					this.state = view_DETACHED;
 					this.$.remove();
 				}
 			});
 		},
 		show_ () {
-			if (this.state < view_ATTACHED) {
+			if (this.state <= view_ATTACHED) {
 				this.parent.$.append(this.$);
 			}
 			this.show();

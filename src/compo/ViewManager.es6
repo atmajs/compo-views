@@ -9,12 +9,40 @@ var ViewManagerCompo = mask.Compo({
 		attributes: {
 			base: '',
 			viewmap: '',
-			routing: true
+			routing: true,
+			nested: true
 		}
 	},
 
 	slots: {
-
+		viewNavigate (sender, path) {
+			if (sender === this) return;
+			var current = this.route;
+			var compo = current && current.value && current.value.compo;
+			this
+				.navigate(path, { defaultView: false })
+				.done(() => {
+					if (current === this.route) {
+						compo.emitIn('viewActivation', this.route.current.params);
+					}
+				});
+			return false;
+		},
+		viewActivation (sender) {
+			if (sender === this) return;
+			var compo = this.route && this.route.value && this.route.value.compo;
+			if (compo) {
+				//compo.emitIn('viewActivation', this.route.current.params);
+			}
+			return false;
+		},
+		viewDeactivation (sender) {
+			var compo = this.route && this.route.value && this.route.value.compo;
+			if (compo) {
+				compo.emitIn('viewDeactivation');
+			}
+			return false;
+		}
 	},
 
 	scope: {
@@ -62,21 +90,36 @@ var ViewManagerCompo = mask.Compo({
 			return;
 		}
 		var viewData = this.route.value;
-		viewData.compo = this.find('View');
-		if (viewData.compo != null) {
-			viewData.compo.emitIn('viewActivation');
+		var compo = this.find('View');
+		if (compo != null) {
+			compo.emitIn('viewActivation');
 		}
+		viewData.compo = compo;
 		this.activityTracker.show(this.route, () => Compo.await(this));
 	},
-	navigate (path) {
+	isNested () {
+		var owner = Compo.closest(this.parent, 'ViewManager');
+		return owner != null;
+	},
+	navigate (path, opts) {
 		var route = ViewMap.getRouteByPath(this, path);
 		if (route == null) {
-			return new mask.class.Deferred().reject(`View not found: ${path}`);
+			var dfr = new mask.class.Deferred();
+			if (opts && opts.defaultView === false) {
+				return dfr.resolve(this.route);
+			}
+			return dfr.reject(`View not found: ${path}`);
 		}
+		var initial = route.value.compo == null;
 		return this
 			.activityTracker
 			.show(route, () => this.renderView(route))
-			.done(() => this.performShow(route));
+			.done(() => {
+				if (initial === false) {
+					route.value.compo.emitIn('viewNavigate', path);
+				}
+				this.performShow(route);
+			});
 	},
 
 	hideCompo_ (compo) {
