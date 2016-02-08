@@ -8,9 +8,11 @@
 	</head>
 	<body>
 		<script type='text/mask' data-run='auto'>
+			import Toggler from '../toggler';
+
 			h3 > 'Async tabs'
 
-			let AsyncOne {
+			define AsyncOne {
 				function onRenderStart () {
 					var self = this;
 					return mask.class.Deferred.run(function(resolve){
@@ -21,7 +23,8 @@
 					})
 				}
 			}
-			let AsyncTwo {
+
+			define AsyncTwo {
 				function onRenderStart () {
 					var self = this;
 					return mask.class.Deferred.run(function(resolve){
@@ -34,15 +37,16 @@
 			}
 
 			ViewManager {
-				View route='?one' default{
+				View route='?a1' default{
 					AsyncOne;
 				}
-				View route='?two' {
+				View route='?a2' {
 					AsyncTwo;
 				}
 			}
 
-			import from '../toggler';
+			Toggler (2);
+
 		</script>
 	</body>
 </html>

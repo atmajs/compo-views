@@ -14,7 +14,7 @@ UTest({
 				await (300);
 				has ('b');
 
-				find ('.navigate > [data-route="?two"]') {
+				find ('.navigate > [data-route="?a2"]') {
 					do click;
 				}
 				hasNot('em');
