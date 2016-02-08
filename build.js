@@ -13,8 +13,8 @@ module.exports = {
 				}
 			}
 		},
-		files: 'builds/view.js',
-		output: 'lib/view.min.js'
+		files: 'builds/views.js',
+		output: 'lib/views.min.js'
 	},
 
 	'watch': {

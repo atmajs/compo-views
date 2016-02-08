@@ -1,7 +1,7 @@
 ## Views Component
 [![Build Status](https://travis-ci.org/atmajs/compo-views.png?branch=master)](https://travis-ci.org/atmajs/compo-views)
 
-[![Build Status](https://travis-ci.org/atmajs/compo-views.png?branch=master)](https://travis-ci.org/atmajs/compo-views)
+[![npm version](https://badge.fury.io/js/compo-views.svg)](https://badge.fury.io/js/compo-views)
 [![Bower version](https://badge.fury.io/bo/compo-views.svg)](http://badge.fury.io/bo/compo-views)
 
 

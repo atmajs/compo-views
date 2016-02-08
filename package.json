@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "compo-views",
   "version": "0.10.18",
   "devDependencies": {
     "atma": ">0.9.26",
@@ -25,6 +25,7 @@
     }
   },
   "dependencies": {
-    "maskjs": "^0.51.27"
+    "maskjs": "^0.51.27",
+    "ruta": "latest"
   }
 }
