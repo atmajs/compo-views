@@ -29,6 +29,8 @@ UTest({
 
 					find ('input') {
 						val A;
+						focus;
+						select (1, 1);
 						press X;
 						change;
 					}
@@ -50,6 +52,8 @@ UTest({
 
 					find ('input') {
 						val B;
+						focus;
+						select (1, 1);
 						press D;
 						change;
 					}
