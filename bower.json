@@ -18,7 +18,7 @@
     "src"
   ],
   "dependencies": {
-    "maskjs": ">=0.51.27",
+    "maskjs": ">=0.54.21",
     "mask-animation": ">=1.0.7",
     "ruta": ">=0.1.17"
   }

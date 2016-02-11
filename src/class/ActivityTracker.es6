@@ -18,9 +18,17 @@ var ActivityTracker;
 				dfr = this.routes[i].dfr;
 			}
 
-			this.history.push(route)
+			this.history.push({ current: route.current, route: route });
 			this.requestProgressStart();
 			return dfr.done(() => this.requestProgressEnd(route)).fail(() => { debugger });
+		},
+		clear (route) {
+			var i = this.routes.indexOf(route);
+			if (i === -1) return;
+
+			route.dfr = null;
+			route.value.compo = null;
+			this.routes.splice(i, 1);
 		},
 		requestProgressStart (route) {
 			this.cancelProgressEnd();
@@ -49,7 +57,12 @@ var ActivityTracker;
 			this.vm.emitIn('viewActivity', 'end');
 		},
 		get current () {
-			return this.history[this.history.length - 1];
+			var track = this.history[this.history.length - 1];
+			return track && track.route;
+		},
+		back () {
+			this.history.pop();
+			return this.history.pop();
 		},
 		history: null,
 		active: false,

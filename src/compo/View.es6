@@ -11,7 +11,8 @@ var ViewCompo;
 		meta: {
 			attributes: {
 				'default': false,
-				'detach': true
+				'detach': true,
+				'recycle': false
 			}
 		},
 		slots: {
@@ -32,7 +33,11 @@ var ViewCompo;
 		},
 		state: view_NONE,
 		hide_ () {
-			this.hide().then(() => {
+			return this.hide().then(() => {
+				if (this.xRecycle === true) {
+					this.remove();
+					return;
+				}
 				if (this.xDetach === true) {
 					this.state = view_DETACHED;
 					this.$.remove();
@@ -43,7 +48,7 @@ var ViewCompo;
 			if (this.state <= view_ATTACHED) {
 				this.parent.$.append(this.$);
 			}
-			this.show();
+			return this.show();
 		},
 		hide () {
 			this.$.hide();

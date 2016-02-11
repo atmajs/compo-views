@@ -15,12 +15,12 @@ var ViewManagerCompo = mask.Compo({
 	},
 
 	slots: {
-		viewNavigate (sender, path) {
+		viewNavigate (sender, path, model) {
 			if (sender === this) return;
 			var current = this.route;
 			var compo = current && current.value && current.value.compo;
 			this
-				.navigate(path, { defaultView: false })
+				.navigate(path, model, { defaultView: false })
 				.done(() => {
 					if (current === this.route) {
 						compo.emitIn('viewActivation', this.route.current.params);
@@ -42,6 +42,10 @@ var ViewManagerCompo = mask.Compo({
 				compo.emitIn('viewDeactivation');
 			}
 			return false;
+		},
+		back (sender) {
+			var track = this.activityTracker.back();
+			this.navigate(track.current.path);
 		}
 	},
 
@@ -75,9 +79,12 @@ var ViewManagerCompo = mask.Compo({
 		this.ensureCompo_('Notification');
 		this.ensureCompo_('Progress');
 		this.attr.path = path;
+
+		ctx.params = route && route.current && route.current.params;
 	},
 	onRenderEnd (elements, model, ctx) {
 		this.activityTracker = new ActivityTracker(this);
+		this.ctx = ctx;
 
 		ViewMap.ensure(this, model, ctx);
 		if (this.xRouting) {
@@ -97,11 +104,16 @@ var ViewManagerCompo = mask.Compo({
 		viewData.compo = compo;
 		this.activityTracker.show(this.route, () => Compo.await(this));
 	},
+	getCtx (route) {
+		var ctx = mask.obj.extend(null, this.ctx);
+		ctx.params = route.current.params;
+		return ctx;
+	},
 	isNested () {
 		var owner = Compo.closest(this.parent, 'ViewManager');
 		return owner != null;
 	},
-	navigate (path, opts) {
+	navigate (path, model, opts) {
 		var route = ViewMap.getRouteByPath(this, path);
 		if (route == null) {
 			var dfr = new mask.class.Deferred();
@@ -113,7 +125,7 @@ var ViewManagerCompo = mask.Compo({
 		var initial = route.value.compo == null;
 		return this
 			.activityTracker
-			.show(route, () => this.renderView(route))
+			.show(route, () => this.renderView(route, model))
 			.done(() => {
 				if (initial === false) {
 					route.value.compo.emitIn('viewNavigate', path);
@@ -125,13 +137,13 @@ var ViewManagerCompo = mask.Compo({
 	hideCompo_ (compo) {
 		if (compo == null) return;
 		compo.emitIn('viewDeactivation', this);
-		compo.hide_();
+		return compo.hide_();
 	},
 
 	showCompo_ (compo) {
 		if (compo == null) return;
 		compo.emitIn('viewActivation', this);
-		compo.show_();
+		return compo.show_();
 	},
 
 	emit (type, ...args) {
@@ -142,15 +154,15 @@ var ViewManagerCompo = mask.Compo({
 		compo.emitIn('viewActivation', route.current.params);
 	},
 
-	renderView (route) {
+	renderView (route, model) {
 		return mask.class.Deferred.run((resolve, reject, dfr) => {
 			if (route.value.compo) {
 				resolve(route);
 				return;
 			}
-			var params = route.current && route.current.params;
+			var ctx = this.getCtx(route);
 			mask
-				.renderAsync(route.value.getNodes(), {params}, null, null, this)
+				.renderAsync(route.value.getNodes(), model, ctx, null, this)
 				.done((frag, compo) => {
 					var last = compo.components[compo.components.length - 1];
 					var view = Compo.prototype.find.call(last, 'View');
@@ -165,7 +177,14 @@ var ViewManagerCompo = mask.Compo({
 			return;
 		}
 		this.route = route;
-		this.hideCompo_(current.value.compo);
+
+		var currentView = current.value.compo;
+		if (currentView) {
+			this.hideCompo_(currentView);
+			if (currentView.xRecycle === true) {
+				this.activityTracker.clear(current);
+			}
+		}
 		this.showCompo_(route.value.compo);
 	},
 

@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+	<head>
+		<script src='../../bower_components/jquery/dist/jquery.js'></script>
+		<script src='../../bower_components/maskjs/lib/mask.js'></script>
+		<script src='../../bower_components/ruta/lib/ruta.js'></script>
+		<script src='../../lib/views.js'></script>
+
+	</head>
+	<body>
+		<script type='text/mask' data-run='auto'>
+			h3 > 'Sync tabs'
+
+			define Foo {
+
+				var model = [{letter: 'A'}, {letter: 'B'}];
+
+				slot edit (e) {
+					var model = Compo.element.getModel(e.target);
+					this.find('ViewManager').navigate('?edit', model);
+				}
+
+				event blur (e) {
+					console.log('BLUR');
+				}
+				event change (e) {
+					console.log('CHANGE');
+				}
+
+				ViewManager {
+
+					View route='?letters' default{
+						ul > each(.) > li {
+							span > '~[bind: letter]'
+							button x-tap='edit' > 'Edit'
+						}
+					}
+					View route='?edit' recycle {
+						input > dualbind value='letter';
+						button x-tap='back' > 'Back'
+					}
+				}
+			}
+
+			Foo;
+
+
+
+		</script>
+	</body>
+</html>
