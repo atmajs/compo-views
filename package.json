@@ -1,6 +1,6 @@
 {
   "name": "compo-views",
-  "version": "0.10.20",
+  "version": "0.10.21",
   "devDependencies": {
     "atma": ">0.9.26",
     "atma-loader-babel": "latest",
