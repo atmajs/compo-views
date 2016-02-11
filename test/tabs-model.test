@@ -30,9 +30,9 @@ UTest({
 					find ('input') {
 						val A;
 						focus;
-						select (1, 1);
-						press X;
-						change;
+						select (1,1);
+						do type X;
+						trigger change;
 					}
 					find ('button') > click;
 				}
@@ -52,9 +52,10 @@ UTest({
 					find ('input') {
 						val B;
 						focus;
-						select (1, 1);
-						press D;
-						change;
+						select (1,1);
+						do press D;
+						trigger change;
+						val BD;
 					}
 					find ('button') > click;
 				}

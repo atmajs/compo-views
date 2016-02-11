@@ -6,7 +6,7 @@
     "Alex Kit <alex.kit@atmajs.com>"
   ],
   "description": "MaskJS ViewManager Component (Atma.js)",
-  "main": "lib/form.js",
+  "main": "lib/views.js",
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -21,5 +21,8 @@
     "maskjs": ">=0.54.21",
     "mask-animation": ">=1.0.7",
     "ruta": ">=0.1.17"
+  },
+  "devDependencies": {
+    "jquery": ">=2.2.0"
   }
 }
