@@ -40,7 +40,8 @@ var ViewCompo;
 				}
 				if (this.xDetach === true) {
 					this.state = view_DETACHED;
-					this.$.remove();
+					var fn = this.$.detach || this.$.remove;
+					fn.call(this.$);
 				}
 			});
 		},

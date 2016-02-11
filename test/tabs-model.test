@@ -49,7 +49,6 @@ UTest({
 
 				find ('.v-view') {
 					length 1;
-
 					find ('input') {
 						val B;
 						focus;
