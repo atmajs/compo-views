@@ -34,7 +34,8 @@
 
 	// import class/ViewData.es6
 	// import class/ActivityTracker.es6
-	
+	// import class/ViewChanger.es6
+
 	// import compo/ViewManager.es6
 	mask.registerHandler('ViewManager', ViewManagerCompo);
 }));

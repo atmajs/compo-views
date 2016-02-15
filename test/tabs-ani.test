@@ -1,0 +1,36 @@
+UTest({
+	$before (next) {
+		UTest
+			.server
+			.request('http://localhost:5777/examples/tabs/anim.html')
+			.done((doc, win) => {
+				next(doc, win);
+			});
+	},
+	'should show initial view' (done, doc, win) {
+		UTest.domtest(doc.body, `
+				find ('.v-view') {
+					length 1;
+					text ('One');
+				}
+			`)
+			.always(() => done(doc, win));
+	},
+	'should animate for 2. View' (done, doc, win) {
+		UTest.domtest(doc.body, `
+				find ('[data-route="?a2"]') > click;
+				await(400);
+				find ('.v-view') {
+					length 1;
+					text ('Two');
+
+					function ShouldAnimate ($, assert) {
+						var opacity = getComputedStyle($[0]).opacity;
+						assert.lt_(opacity, 1);
+						assert.gt_(opacity, 0);
+					}
+				}
+			`)
+			.always(() => done(doc, win));
+	}
+})

@@ -9,7 +9,7 @@
 	</head>
 	<body>
 		<script type='text/mask' data-run='auto'>
-			h3 > 'Sync tabs'
+			h3 > 'Editable list'
 
 			define Foo {
 
@@ -18,13 +18,6 @@
 				slot edit (e) {
 					var model = Compo.element.getModel(e.target);
 					this.find('ViewManager').navigate('?edit', model);
-				}
-
-				event blur (e) {
-					console.log('BLUR');
-				}
-				event change (e) {
-					console.log('CHANGE');
 				}
 
 				ViewManager {
@@ -41,11 +34,7 @@
 					}
 				}
 			}
-
 			Foo;
-
-
-
 		</script>
 	</body>
 </html>

@@ -74,16 +74,20 @@ var ViewManagerCompo = mask.Compo({
 		var path = path_getCurrent(ctx);
 		var route = ViewMap.getRouteByPath(this, path);
 
-		this.route = route;
-		this.nodes = route && route.value.getNodes();
-		this.ensureCompo_('Notification');
-		this.ensureCompo_('Progress');
 		this.attr.path = path;
+		this.route = route;
+		this.nodes = j()
+			.add(this.getCompo_('Notification'))
+			.add(this.getCompo_('Progress'))
+			.add(this.getCompo_('Animation'), false)
+			.add(route && route.value.getNodes());
 
 		ctx.params = route && route.current && route.current.params;
 	},
 	onRenderEnd (elements, model, ctx) {
 		this.activityTracker = new ActivityTracker(this);
+		this.viewChanger = new ViewChanger(this);
+
 		this.ctx = ctx;
 
 		ViewMap.ensure(this, model, ctx);
@@ -177,15 +181,13 @@ var ViewManagerCompo = mask.Compo({
 			return;
 		}
 		this.route = route;
+		this.viewChanger.show(route, current);
 
-		var currentView = current.value.compo;
-		if (currentView) {
-			this.hideCompo_(currentView);
-			if (currentView.xRecycle === true) {
+		if (current != null && current.value.compo != null) {
+			if (current.value.compo.xRecycle === true) {
 				this.activityTracker.clear(current);
 			}
 		}
-		this.showCompo_(route.value.compo);
 	},
 
 	notify (type, message) {
@@ -197,12 +199,12 @@ var ViewManagerCompo = mask.Compo({
 		this.emitIn('formNotification', { type, message });
 	},
 
-	ensureCompo_ (name) {
-		var set = jmask(this).children(name);
-		if (set.length !== 0) {
-			return;
+	getCompo_ (name, shouldCreate = true) {
+		var set = j(this).children(name);
+		if (shouldCreate === false) {
+			return set;
 		}
-		jmask(this).prepend(name);
+		return set.length === 0 ? j(name) : set;
 	},
 
 

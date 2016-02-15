@@ -91,8 +91,9 @@ View template is placed inside the `View` component
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-|`default`|`boolean`  |`false`| If no route is matched, this view will be shown to user |
-|`detach` |`boolean`  |`true` | After the view was hidden, detach the view from DOM.  |
+|`default` |`boolean`  |`false` | If no route is matched, this view will be shown to user |
+|`detach`  |`boolean`  |`true`  | After the view was hidden, detach the view from DOM.  |
+|`recycle` |`boolean`  |`false` | Completely destroy the view on hide and re-render the next time it gets visible .  |
 
 ##### Methods
 

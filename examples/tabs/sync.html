@@ -9,17 +9,18 @@
 	<body>
 		<script type='text/mask' data-run='auto'>
 			h3 > 'Sync tabs'
-			
+
 			ViewManager {
-				View route='?one' default{
+				View route='?a1' default{
 					b style='background: green' > 'One'
 				}
-				View route='?two' {
+				View route='?a2' {
 					em style='background: red' > 'Two'
 				}
 			}
 
-			import from '../toggler';
+			import Toggler from '../toggler';
+			Toggler (2);
 		</script>
 	</body>
 </html>

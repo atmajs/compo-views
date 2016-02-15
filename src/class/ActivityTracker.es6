@@ -3,6 +3,8 @@ var ActivityTracker;
 	ActivityTracker = mask.class.create({
 		tickStart: null,
 		tickEnd: null,
+		history: null,
+		vm: null,
 		constructor (viewManager) {
 			this.history = [];
 			this.routes = [];
@@ -63,11 +65,6 @@ var ActivityTracker;
 		back () {
 			this.history.pop();
 			return this.history.pop();
-		},
-		history: null,
-		active: false,
-		route: null,
-		tick: null,
-		vm: null,
+		}
 	});
 }());
