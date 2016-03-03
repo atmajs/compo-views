@@ -10,23 +10,30 @@
  */
 (function(root, factory){
 	var _global = typeof global !== 'undefined' ? global : window,
-		_mask = _global.mask || (_global.atma && _global.atma.mask);
+		_mask = resolve('mask', 'maskjs'),
+		_ruta = resolve('ruta', 'ruta');
 
-	if (_mask == null) {
-		if (typeof require === 'function') {
-			mask = require('maskjs');
-		} else {
-			throw Error('MaskJS was not loaded');
+
+	function resolve(property, npm) {
+		var lib = _global[property] || (_global.atma && _global.atma[property]);
+		if (lib != null) {
+			return lib;
 		}
+		if (typeof require === 'function') {
+			return require(npm);
+		}
+		throw Error(property + ' was not loaded');
 	}
+
 	factory(
 		_global,
 		_mask,
 		_mask.jmask,
 		_mask.Compo,
-		_mask.Compo.config.getDOMLibrary()
+		_mask.Compo.config.getDOMLibrary(),
+		_ruta
 	);
-}(this, function(global, mask, j, Compo, $){
+}(this, function(global, mask, j, Compo, $, ruta){
 
 	// import utils/obj.es6
 	// import utils/compo.es6

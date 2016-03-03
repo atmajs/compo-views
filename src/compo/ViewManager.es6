@@ -11,7 +11,12 @@ var ViewManagerCompo = mask.Compo({
 			viewmap: '',
 			routing: true,
 			nested: true
-		}
+		},
+		serializeScope: true
+	},
+
+	serializeScope () {
+		return JSON.stringify(this.scope);
 	},
 
 	slots: {
@@ -51,7 +56,8 @@ var ViewManagerCompo = mask.Compo({
 
 	scope: {
 		notificationMsg: '',
-		notificationType: ''
+		notificationType: '',
+		viewmap: ''
 	},
 
 	viewmap: null,
@@ -74,23 +80,44 @@ var ViewManagerCompo = mask.Compo({
 		var path = path_getCurrent(ctx);
 		var route = ViewMap.getRouteByPath(this, path);
 
+		ctx.params = route && route.current && route.current.params;
+
 		this.attr.path = path;
 		this.route = route;
 		this.nodes = j()
 			.add(this.getCompo_('Notification'))
 			.add(this.getCompo_('Progress'))
-			.add(this.getCompo_('Animation'), false)
-			.add(route && route.value.getNodes());
+			.add(this.getCompo_('Animation'), false);
 
-		ctx.params = route && route.current && route.current.params;
+		if (route == null) {
+			return;
+		}
+		var viewData = route.value;
+		if (viewData.path == null) {
+			this.nodes.add(viewData.getNodes() || j());
+			return;
+		}
+		var resume = Compo.pause(this, ctx);
+		this
+			.loadView(route, model)
+			.done((route) => {
+				this.nodes.add(viewData.getNodes() || j());
+				resume();
+			})
+			.fail(() => resume());
+	},
+	onRenderStartClient (model, ctx) {
+		ViewMap.ensure(this, model, ctx);
+		ViewMap.createRoutes(this);
+	},
+	onRenderEndServer () {
+		this.scope.viewmap = this.viewmap.toJSON();
 	},
 	onRenderEnd (elements, model, ctx) {
 		this.activityTracker = new ActivityTracker(this);
 		this.viewChanger = new ViewChanger(this);
-
 		this.ctx = ctx;
 
-		ViewMap.ensure(this, model, ctx);
 		if (this.xRouting) {
 			ViewMap.bindRouter(this, model, ctx);
 		}
@@ -129,7 +156,7 @@ var ViewManagerCompo = mask.Compo({
 		var initial = route.value.compo == null;
 		return this
 			.activityTracker
-			.show(route, () => this.renderView(route, model))
+			.show(route, () => this.loadView(route, model).then(() => this.renderView(route, model)))
 			.done(() => {
 				if (initial === false) {
 					route.value.compo.emitIn('viewNavigate', path);
@@ -158,6 +185,26 @@ var ViewManagerCompo = mask.Compo({
 		compo.emitIn('viewActivation', route.current.params);
 	},
 
+	loadView (route, model) {
+		return mask.class.Deferred.run((resolve, reject) => {
+			var viewData = route.value;
+			if (viewData.viewNode != null) {
+				resolve(route);
+				return;
+			}
+			var path = viewData.path;
+			mask
+				.Module
+				.createModule(new mask.Module.Endpoint(path, 'mask'))
+				.loadModule()
+				.fail(reject)
+				.done(module => {
+					var nodes = module.exports.__nodes__;
+					viewData.createViewNode(nodes);
+					resolve(route);
+				});
+		});
+	},
 	renderView (route, model) {
 		return mask.class.Deferred.run((resolve, reject, dfr) => {
 			if (route.value.compo) {

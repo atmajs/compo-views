@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<atma:styles />
+</head>
+<body>
+	<ViewManager viewmap='$ctx.config.pages' />
+	<atma:scripts />
+</body>
+</html>

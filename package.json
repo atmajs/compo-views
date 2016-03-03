@@ -4,14 +4,14 @@
   "devDependencies": {
     "atma": ">0.9.26",
     "atma-loader-babel": "latest",
-    "atma-server": "^0.1.22"
+    "atma-server": "^0.1.34"
   },
   "scripts": {
     "test": "atma test",
     "examples": "atma server",
     "build": "atma"
   },
-  "atma": {
+  "-atma": {
     "plugins": [
       "atma-loader-babel"
     ],
@@ -25,7 +25,8 @@
     }
   },
   "dependencies": {
-    "maskjs": "^0.51.27",
-    "ruta": "latest"
+    "maskjs": "^0.54.26",
+    "ruta": "^0.2.20",
+    "static-content": "^1.1.23"
   }
 }

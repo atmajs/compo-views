@@ -26,7 +26,7 @@ var ViewChanger;
 					.then(() => {
 						var el = route.value.compo.$[0];
 						ani.start(resolve, el);
-					})
+					});
 			});
 		},
 		hide_ (ani, route) {

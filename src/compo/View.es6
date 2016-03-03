@@ -12,7 +12,11 @@ var ViewCompo;
 			attributes: {
 				'default': false,
 				'detach': true,
-				'recycle': false
+				'recycle': false,
+				'replace': {
+					description: 'This node should be replaced with the loaded template',
+					default: false
+				}
 			}
 		},
 		slots: {
