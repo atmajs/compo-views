@@ -23,10 +23,17 @@ var ViewMap;
 		if (viewmap != null) {
 			return viewmap;
 		}
-		var fn = mask.Utils.Expression.eval;
 		var viewmap = new ViewMap;
-		var scoped = viewManager.scope.viewmap
-			|| (viewManager.xViewmap && fn(viewManager.xViewmap, model, ctx, viewManager));
+		var scoped = viewManager.scope.viewmap;
+
+		if (scoped == null && viewManager.xViewmap) {
+			var fn = mask.Utils.Expression.eval;
+			scoped = fn(viewManager.xViewmap, model, ctx, viewManager);
+		}
+
+		if (scoped == null && mask.is.NODE) {
+			scoped = ViewMap.getFromRoutes(viewManager, ctx);
+		}
 
 		if (mask.is.Array(scoped)) {
 			var arr = scoped;
@@ -55,6 +62,22 @@ var ViewMap;
 			});
 
 		return (viewManager.viewmap = viewmap);
+	};
+
+	ViewMap.getFromRoutes = function(vm, ctx){
+		if (ctx.page == null || ctx.config == null) {
+			return null;
+		}
+		var current = ctx.page.data,
+			pages = ctx.config.pages,
+			key, page, arr = [];
+		for(key in pages) {
+			page = pages[key];
+			if (page.template === current.template) {
+				arr.push(page);
+			}
+		}
+		return arr;
 	};
 
 	ViewMap.createRoutes = function (viewManager) {

@@ -57,7 +57,7 @@ var ViewManagerCompo = mask.Compo({
 	scope: {
 		notificationMsg: '',
 		notificationType: '',
-		viewmap: ''
+		viewmap: null
 	},
 
 	viewmap: null,

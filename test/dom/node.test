@@ -2,7 +2,7 @@ UTest({
 	$config: {
 		'http.process': {
 			command: 'npm run examples',
-			matchReady: '/opened/'
+			matchReady: '/READY/'
 		}
 	},
 	$before: function(next){

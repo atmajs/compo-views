@@ -4,7 +4,7 @@
 	<atma:styles />
 </head>
 <body>
-	<ViewManager viewmap='$ctx.config.pages' />
+	<ViewManager />
 
 	<style>
 		a { margin: 10px; }

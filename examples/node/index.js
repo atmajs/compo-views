@@ -1,12 +1,8 @@
 global.mask = require('maskjs');
-global.logger = require('atma-logger');
-
-var server = require('atma-server');
-//global.mask.Module.cfg('base', '../../');
+global.server = require('atma-server');
 
 server.Application({
 		configs: null,
-  //      base: '../../',
 		config: {
             debug: true,
             port: 5771,
@@ -28,21 +24,13 @@ server.Application({
                     }
 				},
 			},
-			page: {
-				location: {
-					master: 'examples/node/{0}.mask',
-					template: 'examples/node/{0}.mask'
-				}
-			},
 			pages: {
 				'/foo' : {
-					master: 'master',
-                    template: 'layout',
+					template: '/examples/node/layout',
 					view: '/examples/node/foo'
 				},
                 '/bar': {
-                    master: 'master',
-                    template: 'layout',
+                    template: '/examples/node/layout',
 					view: '/examples/node/bar'
                 }
 			}
@@ -57,4 +45,5 @@ server.Application({
             })
 		]
 	})
-	.listen();
+    .done(() => console.log('READY. Port at 5771'))
+	.listen()
