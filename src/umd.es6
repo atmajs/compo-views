@@ -35,11 +35,11 @@
 	);
 }(this, function(global, mask, j, Compo, $, ruta){
 
-	// import utils/obj.es6
-	// import utils/compo.es6
 	// import utils/path.es6
 
 	// import class/ViewData.es6
+	// import class/ViewMap.es6
+
 	// import class/ActivityTracker.es6
 	// import class/ViewChanger.es6
 

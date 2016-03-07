@@ -2,12 +2,17 @@ global.mask = require('maskjs');
 global.logger = require('atma-logger');
 
 var server = require('atma-server');
-global.mask.Module.cfg('base', '../../');
+//global.mask.Module.cfg('base', '../../');
 
 server.Application({
 		configs: null,
-        base: '../../',
+  //      base: '../../',
 		config: {
+            debug: true,
+            port: 5771,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
             env: {
 				server: {
 					scripts: [ 'lib/views.js' ]
@@ -30,22 +35,26 @@ server.Application({
 				}
 			},
 			pages: {
-				'!/' : {
+				'/foo' : {
 					master: 'master',
                     template: 'layout',
-					view: '/examples/node/index'
+					view: '/examples/node/foo'
 				},
-                '/about': {
+                '/bar': {
                     master: 'master',
                     template: 'layout',
-					view: '/examples/node/about'
+					view: '/examples/node/bar'
                 }
 			}
 		}
 	})
 	.processor({
 		after: [
-			atma.server.middleware.static
+			atma.server.middleware.static.config({
+                headers: {
+                        'Access-Control-Allow-Origin': '*'
+                }
+            })
 		]
 	})
-	.listen(5777);
+	.listen();

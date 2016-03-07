@@ -1,0 +1,35 @@
+UTest({
+	$config: {
+		'http.process': {
+			command: 'npm run examples',
+			matchReady: '/opened/'
+		}
+	},
+	$before: function(next){
+		UTest
+			.server
+			.request('http://localhost:5771/foo')
+			.done(next);
+	},
+	'should load `foo` page' (done, doc, win) {
+		UTest
+			.domtest(doc.body, `
+				find ('h4') {
+					text Foo;
+				}
+			`)
+			.always(() => done(doc, win));
+	},
+	'should load `bar` on click' (done, doc, win) {
+		UTest
+			.domtest(doc.body, `
+				find ('a:last-of-type') {
+					click;
+				}
+				await('h3') {
+					text Bar;
+				}
+			`)
+			.always(() => done(doc, win));
+	}
+})

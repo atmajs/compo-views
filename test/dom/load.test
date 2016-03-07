@@ -43,5 +43,4 @@ UTest({
 			`)
 			.always(() => done(doc, win));
 	}
-
-})
+});

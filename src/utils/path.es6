@@ -1,6 +1,4 @@
-var path_interpolate,
-	path_hasInterpolation,
-	path_getCurrent;
+var path_getCurrent;
 (function(){
 
 	path_getCurrent = function(ctx) {

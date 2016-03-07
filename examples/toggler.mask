@@ -11,7 +11,7 @@ define Toggler (count) {
 	}
 
 	section .show {
-		tt > 'Show via direct fn call:'
+		tt > 'Show via direct fn call: '
 		repeat (0..count) {
 			button x-tap='showView' data-route='?a~[index + 1]' > 'a~[index + 1]';
 		}
