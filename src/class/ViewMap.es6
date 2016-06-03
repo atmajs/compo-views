@@ -104,7 +104,15 @@ var ViewMap;
 		while( ++i < imax ) {
 			var view = views[i];
 			if (view.default == true) {
-				return routes.get(view.route);
+				var route = routes.get(view.route);
+				if (route.definition.indexOf('?') > -1) {
+					ruta.navigate(route.definition, {
+						extend: true,
+						silent: true,
+						replace: true
+					});
+				}
+				return route;
 			}
 		}
 		return null;
