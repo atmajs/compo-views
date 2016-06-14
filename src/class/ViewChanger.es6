@@ -5,24 +5,24 @@ var ViewChanger;
 		constructor (viewManager) {
 			this.vm = viewManager;
 		},
-		show (route, prevRoute) {
+		show (route, prevRoute, isInitial) {
 			var show = this.getShow(route);
 			var hide = this.getHide(prevRoute);
 			if (show.parallel) {
 				this.hide_(hide, prevRoute);
-				this.show_(show, route);
+				this.show_(show, route, isInitial);
 				return;
 			}
 			this
 				.hide_(hide, prevRoute)
-				.then(() => this.show_(show, route));
+				.then(() => this.show_(show, route, isInitial));
 		},
 
-		show_ (ani, route) {
+		show_ (ani, route, isInitial) {
 			return mask.class.Deferred.run(resolve => {
 				this
 					.vm
-					.showCompo_(route.value.compo)
+					.showCompo_(route.value.compo, isInitial)
 					.then(() => {
 						var el = route.value.compo.$[0];
 						ani.start(resolve, el);
@@ -49,7 +49,7 @@ var ViewChanger;
 		},
 
 		getAniForCompo (compo, id) {
-			return mask.jmask(compo).children('Animation#' + id)[0]
+			return findAnimation(compo, id);
 		},
 		getAniForRoute (route, id) {
 			var ani = this.getAniForCompo(route.value.compo, id);
@@ -67,4 +67,30 @@ var ViewChanger;
 			cb();
 		}
 	};
+
+	function findAnimation(owner, id) {
+		if (owner == null) {
+			return null;
+		}
+		var compos = owner.components;
+		if (compos == null) {
+			return null;
+		}
+		var imax = compos.length,
+			i = -1;
+		while (++i < imax) {
+			var compo = compos[i];
+			var name = compo.compoName;
+			if (name === 'imports' || name === 'import') {
+				var ani = findAnimation(compo, id);
+				if (ani) {
+					return ani;
+				}
+			}
+			if (name === 'Animation' && compo.attr.id === 'id') {
+				return compo;
+			}
+		}
+		return null;
+	}
 }());
