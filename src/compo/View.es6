@@ -53,6 +53,10 @@ var ViewCompo;
 			if (this.state <= view_ATTACHED) {
 				this.parent.$.append(this.$);
 			}
+			if (this.state === view_NONE ) {
+				this.emitIn('domInsert');
+				this.state = view_ATTACHED;
+			}
 			return this.show();
 		},
 		hide () {

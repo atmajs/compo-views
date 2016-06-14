@@ -161,7 +161,7 @@ var ViewManagerCompo = mask.Compo({
 				if (initial === false) {
 					route.value.compo.emitIn('viewNavigate', path);
 				}
-				this.performShow(route);
+				this.performShow(route, initial);
 			});
 	},
 
@@ -171,10 +171,10 @@ var ViewManagerCompo = mask.Compo({
 		return compo.hide_();
 	},
 
-	showCompo_ (compo) {
-		if (compo == null) return;
-		compo.emitIn('viewActivation', this);
-		return compo.show_();
+	showCompo_ (compo, isInitial) {
+		return compo
+			.show_()
+			.then(() => compo.emitIn('viewActivation', this));
 	},
 
 	emit (type, ...args) {
@@ -213,7 +213,7 @@ var ViewManagerCompo = mask.Compo({
 			}
 			var ctx = this.getCtx(route);
 			mask
-				.renderAsync(route.value.getNodes(), model, ctx, null, this)
+				.renderAsync(route.value.getNodes(), model || this.model, ctx, null, this)
 				.done((frag, compo) => {
 					var last = compo.components[compo.components.length - 1];
 					var view = Compo.prototype.find.call(last, 'View');
@@ -222,13 +222,13 @@ var ViewManagerCompo = mask.Compo({
 				});
 		});
 	},
-	performShow (route) {
+	performShow (route, isInitial) {
 		var current = this.route;
 		if (current === route) {
 			return;
 		}
 		this.route = route;
-		this.viewChanger.show(route, current);
+		this.viewChanger.show(route, current, isInitial);
 
 		if (current != null && current.value.compo != null) {
 			if (current.value.compo.xRecycle === true) {

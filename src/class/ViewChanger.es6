@@ -80,14 +80,14 @@ var ViewChanger;
 			i = -1;
 		while (++i < imax) {
 			var compo = compos[i];
-			var name = compo.compoName;
+			var name = compo.compoName || compo.tagName;
 			if (name === 'imports' || name === 'import') {
 				var ani = findAnimation(compo, id);
 				if (ani) {
 					return ani;
 				}
 			}
-			if (name === 'Animation' && compo.attr.id === 'id') {
+			if (name === 'Animation' && compo.attr.id === id) {
 				return compo;
 			}
 		}
