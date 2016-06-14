@@ -24,13 +24,7 @@ var ViewManagerCompo = mask.Compo({
 			if (sender === this) return;
 			var current = this.route;
 			var compo = current && current.value && current.value.compo;
-			this
-				.navigate(path, model, { defaultView: false })
-				.done(() => {
-					if (current === this.route) {
-						compo.emitIn('viewActivation', this.route.current.params);
-					}
-				});
+			this.navigate(path, model, { defaultView: false });
 			return false;
 		},
 		viewActivation (sender) {
