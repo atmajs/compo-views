@@ -38,7 +38,7 @@ var ViewManagerCompo = mask.Compo({
 		viewDeactivation (sender) {
 			var compo = this.route && this.route.value && this.route.value.compo;
 			if (compo) {
-				compo.emitIn('viewDeactivation');
+				//compo.emitIn('viewDeactivation');
 			}
 			return false;
 		},
@@ -139,12 +139,9 @@ var ViewManagerCompo = mask.Compo({
 		return owner != null;
 	},
 	navigate (path, model, opts) {
-		var route = ViewMap.getRouteByPath(this, path);
+		var route = ViewMap.getRouteByPathOrCurrentOrDefault(this, path);
+		var dfr = new mask.class.Deferred;
 		if (route == null) {
-			var dfr = new mask.class.Deferred();
-			if (opts && opts.defaultView === false) {
-				return dfr.resolve(this.route);
-			}
 			return dfr.reject(`View not found: ${path}`);
 		}
 		var initial = route.value.compo == null;

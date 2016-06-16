@@ -118,6 +118,38 @@ var ViewMap;
 		return null;
 	};
 
+	ViewMap.getRouteByPathOrCurrentOrDefault = function (viewManager, path) {
+		var routes = viewManager.routes,
+			route = routes.get(path);
+		if (route == null) {
+			route = viewManager.route;
+		}
+		if (route == null) {
+			var viewmap = viewManager.viewmap,
+				views = viewmap.views,
+				imax = views.length,
+				i = -1;
+			while( ++i < imax ) {
+				var view = views[i];
+				if (view.default == true) {
+					route = routes.get(view.route);
+					break;
+				}
+			}
+		}
+		if (route == null) {
+			return null;
+		}
+		if (route.definition.indexOf('?') > -1) {
+			ruta.navigate(route.definition, {
+				extend: true,
+				silent: true,
+				replace: true
+			});
+		}
+		return route;
+	};
+
 	ViewMap.bindRouter = function (viewManager, model, ctx) {
 		var viewmap = ViewMap.ensure(viewManager, model, ctx);
 		if (viewmap == null) {
