@@ -120,7 +120,8 @@ var ViewMap;
 
 	ViewMap.getRouteByPathOrCurrentOrDefault = function (viewManager, path) {
 		var routes = viewManager.routes,
-			route = routes.get(path);
+			route = routes.get(path),
+			fromPath = route != null;
 		if (route == null) {
 			route = viewManager.route;
 		}
@@ -140,7 +141,7 @@ var ViewMap;
 		if (route == null) {
 			return null;
 		}
-		if (route.definition.indexOf('?') > -1) {
+		if (fromPath === false && route.definition.indexOf('?') > -1) {
 			ruta.navigate(route.definition, {
 				extend: true,
 				silent: true,
