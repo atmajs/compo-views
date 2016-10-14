@@ -6,8 +6,8 @@ var ViewChanger;
 			this.vm = viewManager;
 		},
 		show (route, prevRoute, isInitial) {
-			var show = this.getShow(route);
-			var hide = this.getHide(prevRoute);
+			var show = this.getShow(route, prevRoute);
+			var hide = this.getHide(prevRoute, route);
 			if (show.parallel) {
 				this.hide_(hide, prevRoute);
 				this.show_(show, route, isInitial);
@@ -41,20 +41,20 @@ var ViewChanger;
 			});
 		},
 
-		getShow (route) {
-			return this.getAniForRoute(route, 'show');
+		getShow (route, beforeRoute) {
+			return this.getAniForRoute(route, 'show', beforeRoute);
 		},
-		getHide (route) {
-			return this.getAniForRoute(route, 'hide');
+		getHide (route, nextRoute) {
+			return this.getAniForRoute(route, 'hide', nextRoute);
 		},
-
-		getAniForCompo (compo, id) {
-			return findAnimation(compo, id);
+		getAniForCompo (compo, id, pairedRouteDefinition) {
+			return findAnimation(compo, id, pairedRouteDefinition);
 		},
-		getAniForRoute (route, id) {
-			var ani = this.getAniForCompo(route.value.compo, id);
+		getAniForRoute (route, id, anchorRoute) {
+			var pairedDef = anchorRoute.definition; 
+			var ani = this.getAniForCompo(route.value.compo, id, pairedDef);
 			if (ani == null) {
-				ani = this.getAniForCompo(this.vm, id);
+				ani = this.getAniForCompo(this.vm, id, pairedDef);
 			}
 			return ani ? ani : Default;
 		}
@@ -68,7 +68,7 @@ var ViewChanger;
 		}
 	};
 
-	function findAnimation(owner, id) {
+	function findAnimation(owner, id, pairedRouteDefinition) {
 		if (owner == null) {
 			return null;
 		}
@@ -77,20 +77,27 @@ var ViewChanger;
 			return null;
 		}
 		var imax = compos.length,
-			i = -1;
+			i = -1, 
+			default_ = null;
 		while (++i < imax) {
 			var compo = compos[i];
 			var name = compo.compoName || compo.tagName;
 			if (name === 'imports' || name === 'import') {
-				var ani = findAnimation(compo, id);
+				var ani = findAnimation(compo, id, pairedRouteDefinition);
 				if (ani) {
 					return ani;
 				}
 			}
 			if (name === 'Animation' && compo.attr.id === id) {
-				return compo;
+				var for_ = compo.attr.for;
+				if (for_ == null && default_ == null) {
+					default_ = compo;
+				}
+				if (for_ === pairedRouteDefinition) {
+					return compo;
+				}
 			}
 		}
-		return null;
+		return default_;
 	}
 }());
