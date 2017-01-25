@@ -139,7 +139,7 @@ var ViewManagerCompo = mask.Compo({
 		return owner != null;
 	},
 	navigate (path, model, opts) {
-		var route = ViewMap.getRouteByPathOrCurrentOrDefault(this, path);
+		var route = ViewMap.getRouteByPathOrCurrentOrDefault(this, path, opts && opts.params);
 		var dfr = new mask.class.Deferred;
 		if (route == null) {
 			return dfr.reject(`View not found: ${path}`);

@@ -118,13 +118,16 @@ var ViewMap;
 		return null;
 	};
 
-	ViewMap.getRouteByPathOrCurrentOrDefault = function (viewManager, path) {
+	ViewMap.getRouteByPathOrCurrentOrDefault = function (viewManager, path, params) {
 		var routes = viewManager.routes,
 			route = routes.get(path),
 			fromPath = route != null;
 		if (route == null) {
 			route = viewManager.route;
+		} else {
+			obj_default(route.current.params, params);
 		}
+
 		if (route == null) {
 			var viewmap = viewManager.viewmap,
 				views = viewmap.views,
@@ -162,9 +165,27 @@ var ViewMap;
 		}
 		viewmap.each(view => {
 			ruta.add(view.route, route => {
-				viewManager.navigate(route.current.path);
+				var current = route.current,
+					path = current.path,
+					params = current.params;
+				viewManager.navigate(path, null, { params: params });
 			});
 		});
 	};
 
+
+	function obj_default (a, b) {
+		if (b == null) {
+			return a;
+		}
+		if (a == null) {
+			return b;
+		}
+		for(var key in b) {
+			if (a[key] == null) {
+				a[key] = b[key];
+			}
+		}
+		return a;
+	}
 }());
