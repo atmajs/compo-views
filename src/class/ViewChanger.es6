@@ -25,7 +25,7 @@ var ViewChanger;
 					.showCompo_(route.value.compo, isInitial)
 					.then(() => {
 						var el = route.value.compo.$[0];
-						ani.start(resolve, el);
+						ani.start(resolve, el, { route: route, isInitial: isInitial });
 					});
 			});
 		},
@@ -37,7 +37,7 @@ var ViewChanger;
 				}
 				ani.start(() => {
 					this.vm.hideCompo_(route.value.compo).then(resolve);
-				}, route.value.compo.$[0]);
+				}, route.value.compo.$[0], { route: route });
 			});
 		},
 

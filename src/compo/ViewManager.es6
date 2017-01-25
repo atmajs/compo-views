@@ -144,6 +144,9 @@ var ViewManagerCompo = mask.Compo({
 		if (route == null) {
 			return dfr.reject(`View not found: ${path}`);
 		}
+		if (route === this.route) {
+			return dfr.resolve(route);
+		}
 		var initial = route.value.compo == null;
 		return this
 			.activityTracker
