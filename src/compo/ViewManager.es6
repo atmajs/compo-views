@@ -144,10 +144,13 @@ var ViewManagerCompo = mask.Compo({
 		if (route == null) {
 			return dfr.reject(`View not found: ${path}`);
 		}
+		var initial = route.value.compo == null;
 		if (route === this.route) {
+			if (initial === false) {
+				route.value.compo.emitIn('viewNavigate', path);
+			}		
 			return dfr.resolve(route);
 		}
-		var initial = route.value.compo == null;
 		return this
 			.activityTracker
 			.show(route, () => this.loadView(route, model).then(() => this.renderView(route, model)))
