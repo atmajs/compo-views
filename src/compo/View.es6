@@ -11,12 +11,13 @@ var ViewCompo;
 		meta: {
 			attributes: {
 				'default': false,
+				'display': {
+					description: 'Hides view when not visible',
+					default: false,
+					type: 'boolean'
+				},
 				'detach': true,
 				'recycle': false,
-				'replace': {
-					description: 'This node should be replaced with the loaded template',
-					default: false
-				}
 			}
 		},
 		slots: {
@@ -29,8 +30,7 @@ var ViewCompo;
 		},
 		tagName: 'div',
 		attr: {
-			class: 'v-view',
-			style: 'position:relative'
+			class: 'v-view'
 		},
 		onRenderStart () {
 
@@ -60,11 +60,21 @@ var ViewCompo;
 			return this.show();
 		},
 		hide () {
-			this.$.hide();
+			let isVisible = this.xDisplay 
+				? view_VISIBLE 
+				: view_HIDDEN;
+			if (isVisible === false) {
+				this.$.hide();
+			}
 			return (new mask.class.Deferred()).resolve();
 		},
 		show () {
-			this.$.show();
+			let isVisible = this.xDisplay 
+				? view_VISIBLE 
+				: view_HIDDEN;			
+			if (isVisible === false) {
+				this.$.show();
+			}
 			return (new mask.class.Deferred()).resolve();
 		}
 	});
