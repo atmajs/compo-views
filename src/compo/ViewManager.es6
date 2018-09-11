@@ -178,10 +178,6 @@ var ViewManagerCompo = mask.Compo({
 		Compo.pipe('views').emit(type, this, ...args);
 	},
 
-	activate (route) {
-		compo.emitIn('viewActivation', route.current.params);
-	},
-
 	loadView (route, model) {
 		return mask.class.Deferred.run((resolve, reject) => {
 			var viewData = route.value;
