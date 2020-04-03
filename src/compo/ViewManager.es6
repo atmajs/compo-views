@@ -125,7 +125,7 @@ var ViewManagerCompo = mask.Compo({
         var viewData = this.route.value;
         var compo = this.find('View');
         if (compo != null) {
-            compo.emitIn('viewActivation');
+            compo.emitIn('viewActivation', this);
         }
         viewData.compo = compo;
         this.activityTracker.show(this.route, () => Compo.await(this));
