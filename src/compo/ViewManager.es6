@@ -20,11 +20,15 @@ var ViewManagerCompo = mask.Compo({
     },
 
     slots: {
-        viewNavigate(sender, path, model) {
+        viewNavigate(sender, path, model, route) {
             if (sender === this) return;
             var current = this.route;
             var compo = current && current.value && current.value.compo;
-            this.navigate(path, model, { defaultView: false, fromParent: true });
+            this.navigate(path, model, { 
+                defaultView: false, 
+                fromParent: true, 
+                params: route && route.current.params || null
+            });
             return false;
         },
         viewActivation(sender) {
@@ -148,7 +152,7 @@ var ViewManagerCompo = mask.Compo({
         var initial = route.value.compo == null;
         if (route === this.route) {
             if (initial === false) {
-                route.value.compo.emitIn('viewNavigate', path);
+                route.value.compo.emitIn('viewNavigate', path, model, route);
             }
             if (opts && opts.fromParent === true && route.value.compo) {
                 route.value.compo.emitIn('viewActivation', this);
