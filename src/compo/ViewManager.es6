@@ -24,9 +24,9 @@ var ViewManagerCompo = mask.Compo({
             if (sender === this) return;
             var current = this.route;
             var compo = current && current.value && current.value.compo;
-            this.navigate(path, model, { 
-                defaultView: false, 
-                fromParent: true, 
+            this.navigate(path, model, {
+                defaultView: false,
+                fromParent: true,
                 params: route && route.current.params || null
             });
             return false;
@@ -78,8 +78,13 @@ var ViewManagerCompo = mask.Compo({
 
         var path = path_getCurrent(ctx);
         var route = ViewMap.getRouteByPath(this, path);
-
-        ctx.params = route && route.current && route.current.params;
+        var params = route && route.current && route.current.params;
+        if (params) {
+            if (ctx.params == null) {
+                ctx.params = {};
+            }
+            mask.obj.extend(ctx.params, params);
+        }
 
         this.attr.path = path;
         this.route = route;
