@@ -102,22 +102,24 @@ var ViewMap;
 			imax = views.length,
 			i = -1;
 		while( ++i < imax ) {
-			var view = views[i];
-			if (view.default && view.default !== false) {
-				let path = typeof view.default === 'string'
-					? view.default
-					: view.route;
-
-				var route = routes.get(path);
-				if (route.definition.indexOf('?') > -1) {
-					ruta.navigate(route.definition, {
-						extend: true,
-						silent: true,
-						replace: true
-					});
-				}
-				return route;
+			let view = views[i];
+			let d = view.default;
+			if (!d) {
+				continue;
 			}
+			let path = view.route;
+			if (typeof d === 'string' && d !== 'true' && d !== 'false' && d !== 'default') {
+				path = d;
+			}
+			var route = routes.get(path);
+			if (route.definition.indexOf('?') > -1) {
+				ruta.navigate(route.definition, {
+					extend: true,
+					silent: true,
+					replace: true
+				});
+			}
+			return route;
 		}
 		return null;
 	};
@@ -139,14 +141,16 @@ var ViewMap;
 				i = -1;
 			while( ++i < imax ) {
 				var view = views[i];
-				if (view.default && view.default !== false) {
-					let path = typeof view.default === 'string'
-						? view.default
-						: view.route;
-
-					route = routes.get(path);
-					break;
+				let d = view.default;
+				if (!d) {
+					continue;
 				}
+				let path = view.route;
+				if (typeof d === 'string' && d !== 'true' && d !== 'false' && d !== 'default') {
+					path = d;
+				}
+				route = routes.get(path);
+				break;
 			}
 		}
 		if (route == null) {

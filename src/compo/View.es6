@@ -10,7 +10,10 @@ var ViewCompo;
 	ViewCompo = Compo({
 		meta: {
 			attributes: {
-				'default': false,
+				'default': {
+					default: '',
+					type: 'string'
+				},
 				'display': {
 					description: 'Hides view when not visible',
 					default: false,

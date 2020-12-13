@@ -22,7 +22,7 @@ var ViewData,
 		 * View is shown when no route is matched, otherwise viewManager decides
 		 * whether to hide everything, or to show an error
 		 */
-		default: false,
+		default: null,
 		constructor (...args) {
 			var imax = args.length,
 				i = -1;
@@ -86,14 +86,14 @@ var ViewData,
 			viewNode: viewNode,
 			route: viewNode.attr.route,
 			path: viewNode.attr.path,
-			'default': Boolean(viewNode.attr['default']),
+			'default': viewNode.attr['default'],
 		});
 	};
 	ViewData.createFromObj = function  (data) {
 		return new ViewData({
 			route: data.route,
 			path: data.path || data.view,
-			'default': Boolean(data['default']),
+			'default': data['default'],
 		});
 	};
 }());
