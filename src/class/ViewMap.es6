@@ -103,8 +103,12 @@ var ViewMap;
 			i = -1;
 		while( ++i < imax ) {
 			var view = views[i];
-			if (view.default == true) {
-				var route = routes.get(view.route);
+			if (view.default && view.default !== false) {
+				let path = typeof view.default === 'string'
+					? view.default
+					: view.route;
+
+				var route = routes.get(path);
 				if (route.definition.indexOf('?') > -1) {
 					ruta.navigate(route.definition, {
 						extend: true,
@@ -135,8 +139,12 @@ var ViewMap;
 				i = -1;
 			while( ++i < imax ) {
 				var view = views[i];
-				if (view.default == true) {
-					route = routes.get(view.route);
+				if (view.default && view.default !== false) {
+					let path = typeof view.default === 'string'
+						? view.default
+						: view.route;
+
+					route = routes.get(path);
 					break;
 				}
 			}

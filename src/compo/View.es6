@@ -1,11 +1,11 @@
 var ViewCompo;
 (function(){
 
-	var view_NONE = 1,
-		view_DETACHED = 2,
-		view_ATTACHED = 3,
-		view_VISIBLE = 4,
-		view_HIDDEN = 5;
+	const view_NONE = 1;
+	const view_DETACHED = 2;
+	const view_ATTACHED = 3;
+	const view_VISIBLE = 4;
+	const view_HIDDEN = 5;
 
 	ViewCompo = Compo({
 		meta: {
@@ -60,8 +60,8 @@ var ViewCompo;
 			return this.show();
 		},
 		hide () {
-			let isVisible = this.xDisplay 
-				? view_VISIBLE 
+			let isVisible = this.xDisplay
+				? view_VISIBLE
 				: view_HIDDEN;
 			if (isVisible === false) {
 				this.$.hide();
@@ -69,9 +69,9 @@ var ViewCompo;
 			return (new mask.class.Deferred()).resolve();
 		},
 		show () {
-			let isVisible = this.xDisplay 
-				? view_VISIBLE 
-				: view_HIDDEN;			
+			let isVisible = this.xDisplay
+				? view_VISIBLE
+				: view_HIDDEN;
 			if (isVisible === false) {
 				this.$.show();
 			}
