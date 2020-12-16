@@ -1,6 +1,6 @@
 {
   "name": "compo-views",
-  "version": "0.10.46",
+  "version": "0.10.47",
   "devDependencies": {
     "app-bundler": "0.0.93",
     "atma": ">0.9.26",
@@ -12,7 +12,7 @@
   "scripts": {
     "test": "atma test",
     "examples": "node examples/node/index",
-    "build": "app-bundler && npm run dts",
+    "build": "app-bundler",
     "watch": "app-bundler --watch"
   },
   "app-bundler": {
