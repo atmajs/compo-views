@@ -2,40 +2,79 @@
   "name": "compo-views",
   "version": "0.10.46",
   "devDependencies": {
+    "app-bundler": "0.0.93",
     "atma": ">0.9.26",
-    "atma-loader-babel": "^1.1.30",
-    "atma-server": "^0.1.34",
-    "babel-preset-es2015": "^6.24.1"
+    "atma-io-middleware-importer": "^1.1.37",
+    "atma-io-middleware-condcomments": "^1.2.8",
+    "atma-loader-ts": "^1.1.12",
+    "atma-server": "^0.1.34"
   },
   "scripts": {
     "test": "atma test",
     "examples": "node examples/node/index",
-    "build": "atma"
+    "build": "app-bundler && npm run dts",
+    "watch": "app-bundler --watch"
+  },
+  "app-bundler": {
+    "file": "src/exports.ts",
+    "outputMain": "lib/views.js",
+    "package": {
+      "module": "commonjs",
+      "moduleWrapper": "custom",
+      "moduleWrapperCustomPath": "./src/umd.js",
+      "commonjs": {
+        "output": "simplified"
+      }
+    },
+    "extensions": {
+      "io": {
+        "type": "js"
+      }
+    },
+    "defaultExtensions": {
+      "js": "ts"
+    },
+    "middlewares": {
+      "ts": [
+        "atma-loader-ts:read",
+        "atma-io-middleware-importer:read",
+        "atma-io-middleware-condcomments:read"
+      ]
+    }
   },
   "atma": {
-    "plugins": [
-      "atma-loader-babel"
-    ],
     "settings": {
-      "atma-loader-babel": {
+      "include": {
+        "amd": true,
+        "extentionDefault": {
+          "js": "ts"
+        }
+      },
+      "atma-utest": {
+        "include": {
+          "amd": true
+        }
+      },
+      "atma-loader-ts": {
         "extensions": [
-          "es6",
-          "test"
+          "test",
+          "ts"
         ],
-        "babel": {
-          "sourceMap": true,
-          "presets": [
-            [
-              "es2015"
-            ]
-          ]
+        "typescript": {
+          "compilerOptions": {
+            "#if (TEST)": {
+              "module": "AMD"
+            }
+          }
         }
       }
     }
   },
+  "peerDependencies": {
+    "maskjs": "^0.54.5",
+    "ruta": "^0.2.65"
+  },
   "dependencies": {
-    "maskjs": "^0.54.26",
-    "ruta": "^0.2.20",
-    "static-content": "^1.1.23"
+    "ruta": "^0.2.67"
   }
 }
