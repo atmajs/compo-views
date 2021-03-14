@@ -1,6 +1,6 @@
 {
   "name": "compo-views",
-  "version": "0.10.47",
+  "version": "0.10.48",
   "devDependencies": {
     "app-bundler": "0.0.93",
     "atma": ">0.9.26",
@@ -36,9 +36,9 @@
     },
     "middlewares": {
       "ts": [
-        "atma-loader-ts:read",
         "atma-io-middleware-importer:read",
-        "atma-io-middleware-condcomments:read"
+        "atma-io-middleware-condcomments:read",
+        "atma-loader-ts:read"
       ]
     }
   },
@@ -71,10 +71,7 @@
     }
   },
   "peerDependencies": {
-    "maskjs": "^0.54.5",
-    "ruta": "^0.2.65"
-  },
-  "dependencies": {
-    "ruta": "^0.2.67"
+    "maskjs": ">0.54.5",
+    "ruta": ">0.2.65"
   }
 }
