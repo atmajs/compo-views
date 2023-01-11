@@ -3,11 +3,11 @@
   "version": "0.10.48",
   "devDependencies": {
     "app-bundler": "0.0.93",
-    "atma": ">0.9.26",
+    "atma": ">0.15.17",
     "atma-io-middleware-importer": "^1.1.37",
     "atma-io-middleware-condcomments": "^1.2.8",
     "atma-loader-ts": "^1.1.12",
-    "atma-server": "^0.1.34"
+    "atma-server": "^0.5.19"
   },
   "scripts": {
     "test": "atma test",
